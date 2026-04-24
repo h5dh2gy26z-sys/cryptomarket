@@ -1,0 +1,100 @@
+// Version: 1.0.0
+type Category__936342486 =
+  {
+    #books;
+    #clothing;
+    #digital;
+    #electronics;
+    #home;
+    #other;
+    #services;
+    #sports
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type ListingId__58075594 = Nat;
+type Listing__798123527 =
+  {
+    category : Category__936342486;
+    coverImageUrl : Text;
+    createdAt : Timestamp__301639476;
+    description : Text;
+    id : ListingId__58075594;
+    isActive : Bool;
+    priceUsd : Float;
+    sellerId : UserId__158757552;
+    title : Text;
+    updatedAt : Timestamp__301639476
+  };
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type Timestamp__301639476 = Int;
+type TransactionId__138870153 = Nat;
+type TransactionStatus__203262454 = {#failed; #paid; #pending; #refunded};
+type Transaction__822992244 =
+  {
+    amountUsd : Float;
+    buyerId : UserId__158757552;
+    createdAt : Timestamp__301639476;
+    cryptoAddress : ?Text;
+    cryptoCurrency : ?Text;
+    cryptoTxnHash : ?Text;
+    id : TransactionId__138870153;
+    listingId : ListingId__58075594;
+    nowPaymentsPaymentId : ?Text;
+    platformFeeUsd : Float;
+    sellerAmountUsd : Float;
+    sellerId : UserId__158757552;
+    status : TransactionStatus__203262454;
+    stripeTransferId : ?Text;
+    updatedAt : Timestamp__301639476
+  };
+type UserId__158757552 = Principal;
+type UserProfile__277265826 =
+  {
+    createdAt : Timestamp__301639476;
+    displayPictureUrl : Text;
+    email : Text;
+    id : UserId__158757552;
+    name : Text;
+    role : UserRole__451090586;
+    stripeConnectAccountId : ?Text
+  };
+type UserRole__1073662873 = {#admin; #guest; #user};
+type UserRole__451090586 = {#both; #buyer; #seller};
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1073662873>
+    };
+  stable listings :
+    {
+      var root : Node__46230540<ListingId__58075594, Listing__798123527>;
+      var size : Nat__490723111
+    };
+  stable nextListingId : {var value : Nat};
+  stable nextTxnId : {var value : Nat};
+  stable nowPaymentsApiKey : {var value : ?Text};
+  stable profiles :
+    {
+      var root : Node__46230540<UserId__158757552, UserProfile__277265826>;
+      var size : Nat__490723111
+    };
+  stable stripeSecretKey : {var value : ?Text};
+  stable transactions :
+    {
+      var root :
+        Node__46230540<TransactionId__138870153, Transaction__822992244>;
+      var size : Nat__490723111
+    }
+};

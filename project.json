@@ -1,0 +1,25 @@
+{
+  "overview": "A global crypto-to-fiat marketplace where buyers pay with cryptocurrency (Bitcoin, Ethereum, USDC) and sellers receive fiat payouts via Stripe Connect. Features user accounts, product listings with image uploads, real-time crypto exchange rates, and full transaction history.",
+  "features": [
+    "User accounts with Internet Identity login and seller/buyer roles",
+    "Marketplace listings with title, description, price, category, and cover image",
+    "Crypto payment checkout via NOWPayments (BTC, ETH, USDC)",
+    "Real-time crypto/USD exchange rates at checkout",
+    "Transaction history for buyers and sellers",
+    "Seller dashboard with Stripe Connect payout management",
+    "Search and category filter for browsing listings",
+    "Platform fee management (2.9% + $0.30 per transaction)"
+  ],
+  "category": "marketplace",
+  "tags": [
+    "crypto",
+    "marketplace",
+    "payments",
+    "blockchain",
+    "fiat",
+    "stripe",
+    "nowpayments",
+    "defi"
+  ],
+  "last_updated": "2026-04-24T19:26:50.161Z"
+}

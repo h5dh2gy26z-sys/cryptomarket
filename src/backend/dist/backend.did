@@ -1,0 +1,161 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type UserRole__1 = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserRole = 
+ variant {
+   both;
+   buyer;
+   seller;
+ };
+type UserProfile = 
+ record {
+   createdAt: Timestamp;
+   displayPictureUrl: text;
+   email: text;
+   id: UserId;
+   name: text;
+   role: UserRole;
+   stripeConnectAccountId: opt text;
+ };
+type UserId = principal;
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type TransactionStatus = 
+ variant {
+   failed;
+   paid;
+   pending;
+   refunded;
+ };
+type TransactionId = nat;
+type Transaction = 
+ record {
+   amountUsd: float64;
+   buyerId: UserId;
+   createdAt: Timestamp;
+   cryptoAddress: opt text;
+   cryptoCurrency: opt text;
+   cryptoTxnHash: opt text;
+   id: TransactionId;
+   listingId: ListingId;
+   nowPaymentsPaymentId: opt text;
+   platformFeeUsd: float64;
+   sellerAmountUsd: float64;
+   sellerId: UserId;
+   status: TransactionStatus;
+   stripeTransferId: opt text;
+   updatedAt: Timestamp;
+ };
+type Timestamp = int;
+type SellerBalance = 
+ record {
+   availableUsd: float64;
+   pendingUsd: float64;
+ };
+type PayoutResult = 
+ record {
+   amountUsd: float64;
+   stripeTransferId: text;
+   transactionId: TransactionId;
+ };
+type PaymentInitResult = 
+ record {
+   currency: text;
+   expiresAt: Timestamp;
+   paymentAddress: text;
+   paymentAmount: float64;
+   paymentId: text;
+   transactionId: TransactionId;
+ };
+type ListingInput = 
+ record {
+   category: Category;
+   coverImageUrl: text;
+   description: text;
+   priceUsd: float64;
+   title: text;
+ };
+type ListingId = nat;
+type ListingFilter = 
+ record {
+   category: opt Category;
+   maxPriceUsd: opt float64;
+   minPriceUsd: opt float64;
+   searchQuery: opt text;
+ };
+type Listing = 
+ record {
+   category: Category;
+   coverImageUrl: text;
+   createdAt: Timestamp;
+   description: text;
+   id: ListingId;
+   isActive: bool;
+   priceUsd: float64;
+   sellerId: UserId;
+   title: text;
+   updatedAt: Timestamp;
+ };
+type Category = 
+ variant {
+   books;
+   clothing;
+   digital;
+   electronics;
+   home;
+   other;
+   services;
+   sports;
+ };
+service : {
+  _initializeAccessControl: () -> ();
+  assignCallerUserRole: (user: principal, role: UserRole__1) -> ();
+  browseListings: (filter: opt ListingFilter) -> (vec Listing) query;
+  connectStripeAccount: (stripeConnectAccountId: text) -> ();
+  createListing: (input: ListingInput) -> (Listing);
+  deleteListing: (listingId: ListingId) -> (bool);
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole__1) query;
+  getListing: (listingId: ListingId) -> (opt Listing) query;
+  getMyListings: () -> (vec Listing) query;
+  getMyTransactionsAsBuyer: () -> (vec Transaction) query;
+  getMyTransactionsAsSeller: () -> (vec Transaction) query;
+  getSellerBalance: () -> (SellerBalance) query;
+  getTransaction: (txnId: TransactionId) -> (opt Transaction) query;
+  getUserProfile: (userId: UserId) -> (opt UserProfile) query;
+  initiateCryptoPayment: (listingId: ListingId, cryptoCurrency: text) ->
+   (PaymentInitResult);
+  isCallerAdmin: () -> (bool) query;
+  isPaymentConfigured: () -> (bool) query;
+  requestPayout: (txnId: TransactionId) -> (PayoutResult);
+  saveCallerUserProfile: (name: text, email: text, displayPictureUrl: 
+   text, role: UserRole) -> (UserProfile);
+  setNowPaymentsApiKey: (apiKey: text) -> ();
+  setStripeSecretKey: (secretKey: text) -> ();
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateListing: (listingId: ListingId, input: ListingInput) -> (opt Listing);
+  updatePaymentStatus: (paymentId: text) -> (opt Transaction);
+}
