@@ -14,7 +14,7 @@
     "bindgen": "caffeine-bindgen --did-file ./src/backend/dist/backend.did --out-dir ./src/frontend/src --actor-interface-file --force"
   },
   "devDependencies": {
-    "sharp": "^0.34.4"
+    "sharp": "^0.35.0"
   },
   "dependencies": {
     "@caffeineai/core-infrastructure": "^0.2.1"
